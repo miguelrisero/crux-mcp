@@ -5,6 +5,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); version
 
 ## [Unreleased]
 
+### Added
+
+- Published to PyPI. Install is now `uvx crux-mcp` rather than a git URL.
+
 ## [0.1.0] - 2026-08-12
 
 First release.

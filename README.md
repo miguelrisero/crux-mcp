@@ -3,6 +3,7 @@
 [![CI](https://github.com/miguelrisero/crux-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/miguelrisero/crux-mcp/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/crux-mcp)](https://pypi.org/project/crux-mcp/)
 [![MCP](https://img.shields.io/badge/MCP-server-purple)](https://modelcontextprotocol.io)
 
 An [MCP](https://modelcontextprotocol.io) server for the **Chrome UX Report** — real-user Core Web Vitals for any origin or URL, straight from the dataset Google uses for its page experience signal.
@@ -33,9 +34,6 @@ This server handles all three, and tells you plainly when CrUX simply has no dat
 ## Install
 
 Requires Python 3.10+. No cloning needed — [`uvx`](https://docs.astral.sh/uv/) runs it on demand.
-
-> Until the first PyPI release, replace `uvx crux-mcp` with
-> `uvx --from git+https://github.com/miguelrisero/crux-mcp crux-mcp` in any snippet below.
 
 ### Claude Code
 
