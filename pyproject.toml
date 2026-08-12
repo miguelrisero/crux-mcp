@@ -24,7 +24,10 @@ crux-mcp = "crux_mcp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/miguelrisero/crux-mcp"
+Documentation = "https://github.com/miguelrisero/crux-mcp#readme"
+Repository = "https://github.com/miguelrisero/crux-mcp"
 Issues = "https://github.com/miguelrisero/crux-mcp/issues"
+Changelog = "https://github.com/miguelrisero/crux-mcp/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]

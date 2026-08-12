@@ -205,6 +205,14 @@ ruff check .
 
 The client is deliberately dependency-free beyond `mcp` — plain `urllib`, no `requests`. Tests cover threshold boundaries, form-factor handling, string-vs-numeric p75 (CLS arrives as a string), and the summarisers, all without touching the network.
 
+## Who built this
+
+Built at [BetterPic](https://www.betterpic.io) while auditing our own Core Web Vitals.
+The CrUX API kept being the thing we wanted an agent to reach, and nothing exposed it.
+
+Made by the team behind [Patricia](https://patricia.app), which does this kind of SEO
+analysis as a product, and [Runflow](https://runflow.io).
+
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
