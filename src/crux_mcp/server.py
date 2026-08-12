@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 
 from .client import (
     CORE_WEB_VITALS,
@@ -28,6 +29,16 @@ app = MCPServer(
 
 _client = CruxClient()
 
+# Every tool is a read-only query against a public Google dataset. Nothing mutates,
+# repeats are safe, and all of them reach the open internet.
+READ_ONLY = ToolAnnotations(
+    read_only_hint=True,
+    destructive_hint=False,
+    idempotent_hint=True,
+    open_world_hint=True,
+)
+
+
 
 def _ok(payload: dict) -> str:
     return json.dumps(payload, indent=2)
@@ -37,7 +48,7 @@ def _err(exc: CruxError) -> str:
     return json.dumps({"error": str(exc)}, indent=2)
 
 
-@app.tool()
+@app.tool(annotations=READ_ONLY, title="CrUX: current Core Web Vitals")
 def crux_record(
     origin: str = "",
     url: str = "",
@@ -58,7 +69,7 @@ def crux_record(
     return _ok(data if raw else summarise_record(data))
 
 
-@app.tool()
+@app.tool(annotations=READ_ONLY, title="CrUX: weekly trend")
 def crux_history(
     origin: str = "",
     url: str = "",
@@ -86,7 +97,7 @@ def crux_history(
     return _ok(summary)
 
 
-@app.tool()
+@app.tool(annotations=READ_ONLY, title="CrUX: compare origins")
 def crux_compare(
     origins: str,
     form_factor: str = "PHONE",

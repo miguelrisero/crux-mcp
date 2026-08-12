@@ -1,0 +1,37 @@
+name: Bug report
+description: Something returns the wrong answer, or an error you cannot act on
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, two things that are usually not bugs:
+
+        - **`400 INVALID_ARGUMENT`** means the credential is wrong. CrUX takes an API
+          key, not OAuth or a service account.
+        - **"no CrUX data for that target"** means the URL has too little traffic for a
+          record. Try the origin instead. This is a property of CrUX, not of this server.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: The tool you called, the arguments, and what came back.
+      placeholder: crux_record(url="https://example.com/page") returned ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "0.1.0, or the commit sha"
+  - type: input
+    id: client
+    attributes:
+      label: MCP client
+      placeholder: "Claude Code, Claude Desktop, Cursor, MCP Inspector..."

@@ -3,6 +3,7 @@
 [![CI](https://github.com/miguelrisero/crux-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/miguelrisero/crux-mcp/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![MCP](https://img.shields.io/badge/MCP-server-purple)](https://modelcontextprotocol.io)
 
 An [MCP](https://modelcontextprotocol.io) server for the **Chrome UX Report** — real-user Core Web Vitals for any origin or URL, straight from the dataset Google uses for its page experience signal.
 
@@ -31,13 +32,23 @@ This server handles all three, and tells you plainly when CrUX simply has no dat
 
 ## Install
 
-Requires Python 3.10+. No cloning needed — [`uvx`](https://docs.astral.sh/uv/) runs it straight from the repo.
+Requires Python 3.10+. No cloning needed — [`uvx`](https://docs.astral.sh/uv/) runs it on demand.
+
+> Until the first PyPI release, replace `uvx crux-mcp` with
+> `uvx --from git+https://github.com/miguelrisero/crux-mcp crux-mcp` in any snippet below.
 
 ### Claude Code
 
 ```bash
-claude mcp add crux --scope user -e CRUX_API_KEY=your_key_here \
-  -- uvx --from git+https://github.com/miguelrisero/crux-mcp crux-mcp
+claude mcp add crux --scope user -e CRUX_API_KEY=your_key_here -- uvx crux-mcp
+```
+
+Or keep the key out of your MCP config entirely by sourcing it from a shared secrets
+file at launch — worth doing if you already keep credentials in one place:
+
+```bash
+claude mcp add crux --scope user -- sh -c \
+  'set -a; . "$HOME/.secrets/mcp-keys.env"; set +a; exec uvx crux-mcp'
 ```
 
 ### Claude Desktop / Cursor / Windsurf
@@ -49,7 +60,7 @@ Add to your MCP config (`claude_desktop_config.json`, `.cursor/mcp.json`, …):
   "mcpServers": {
     "crux": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/miguelrisero/crux-mcp", "crux-mcp"],
+      "args": ["crux-mcp"],
       "env": { "CRUX_API_KEY": "your_key_here" }
     }
   }
@@ -59,7 +70,7 @@ Add to your MCP config (`claude_desktop_config.json`, `.cursor/mcp.json`, …):
 ### VS Code
 
 ```bash
-code --add-mcp '{"name":"crux","command":"uvx","args":["--from","git+https://github.com/miguelrisero/crux-mcp","crux-mcp"],"env":{"CRUX_API_KEY":"your_key_here"}}'
+code --add-mcp '{"name":"crux","command":"uvx","args":["crux-mcp"],"env":{"CRUX_API_KEY":"your_key_here"}}'
 ```
 
 ### From a clone
@@ -112,6 +123,9 @@ with no mention of authentication — the same error you get for a malformed bod
 | `crux_compare` | How do we stack up against competitors? |
 
 All three take `form_factor`: `PHONE` (default), `DESKTOP`, `TABLET` or `ALL`.
+
+Every tool is annotated `readOnlyHint`, `idempotentHint` and `openWorldHint`, so clients
+that surface capability hints can show these as safe to call without confirmation.
 
 ### `crux_record`
 
@@ -170,6 +184,15 @@ One row per origin with the three Core Web Vitals and a pass flag. Origins with 
 - **Data is a 28-day rolling p75**, updated daily but always trailing. It will not show you the effect of a deploy you shipped this morning.
 - **History is weekly and capped at 25 points**, roughly six months.
 - **`ALL` is not a form factor**, it means "do not filter". The server translates it by omitting the field, which is what the API expects.
+
+## Try it without an MCP client
+
+The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) runs the server
+standalone and lets you call each tool by hand — the fastest way to confirm a key works:
+
+```bash
+CRUX_API_KEY=your_key npx @modelcontextprotocol/inspector uvx crux-mcp
+```
 
 ## Development
 

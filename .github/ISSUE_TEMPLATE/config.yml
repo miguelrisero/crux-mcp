@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: CrUX API documentation
+    url: https://developer.chrome.com/docs/crux/api
+    about: For questions about the data itself, coverage, or thresholds.

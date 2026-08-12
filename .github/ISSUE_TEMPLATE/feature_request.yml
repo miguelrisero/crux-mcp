@@ -1,0 +1,21 @@
+name: Feature request
+description: A tool or field that would make this more useful
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to find out?
+      description: The question you want to answer, rather than the API call you want wrapped.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would that look like
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This can be answered from the CrUX API (not PageSpeed Insights or Lighthouse)
