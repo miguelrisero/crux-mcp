@@ -56,3 +56,40 @@ jobs:
           path: dist/
 
       - uses: pypa/gh-action-pypi-publish@release/v1
+
+  registry:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # OIDC proves this workflow belongs to the io.github.miguelrisero namespace,
+      # so the registry needs no stored credential either.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install mcp-publisher
+        run: |
+          VERSION=$(curl -s https://api.github.com/repos/modelcontextprotocol/registry/releases/latest | grep -oP '"tag_name": "\Kv[0-9.]+')
+          curl -sL "https://github.com/modelcontextprotocol/registry/releases/download/${VERSION}/mcp-publisher_linux_amd64.tar.gz" \
+            | tar xz mcp-publisher
+          ./mcp-publisher --help > /dev/null
+
+      - name: Wait for PyPI to serve the new version
+        # The registry verifies the declared package exists. PyPI's CDN can lag the
+        # upload by a minute, and a publish that runs too early fails on a real package.
+        run: |
+          VERSION=$(python -c "import json;print(json.load(open('server.json'))['version'])")
+          for i in $(seq 1 20); do
+            if curl -sf "https://pypi.org/pypi/crux-mcp/${VERSION}/json" > /dev/null; then
+              echo "crux-mcp ${VERSION} is live on PyPI"; exit 0
+            fi
+            echo "waiting for PyPI... ($i)"; sleep 15
+          done
+          echo "PyPI did not serve ${VERSION} in time"; exit 1
+
+      - name: Publish to the MCP Registry
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
+

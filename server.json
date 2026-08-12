@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.miguelrisero/crux-mcp",
   "title": "Chrome UX Report",
-  "description": "Real-user Core Web Vitals from Google's Chrome UX Report — current p75s, 25-week trends, and competitor comparison for any origin or URL.",
+  "description": "Real-user Core Web Vitals from Google's Chrome UX Report for any origin or URL.",
   "repository": {
     "url": "https://github.com/miguelrisero/crux-mcp",
     "source": "github"
